@@ -24,7 +24,7 @@ from hashlib import md5
 from urllib.parse import urlencode
 
 # --- 自定义模块导入 ---
-from login import login_via_qrcode # 假设 login.py 在同一目录
+from login import login_via_qrcode
 
 # --- 界面颜色主题定义 (浅色清爽主题) ---
 BG_LIGHT_PRIMARY = "#F5F5F5"; BG_WIDGET_ALT = "#FFFFFF"; FG_TEXT_DARK = "#212121"
@@ -60,7 +60,7 @@ def resource_path(relative_path):
     except Exception: base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
-# --- Wbi 签名实现 ---
+# Wbi 签名实现
 mixinKeyEncTab = [ 46, 47, 18, 2, 53, 8, 23, 32, 15, 50, 10, 31, 58, 3, 45, 35, 27, 43, 5, 49, 33, 9, 42, 19, 29, 28, 14, 39, 12, 38, 41, 13, 37, 48, 7, 16, 24, 55, 40, 61, 26, 17, 0, 1, 60, 51, 30, 4, 22, 25, 54, 21, 56, 59, 6, 63, 57, 62, 11, 36, 20, 34, 44, 52 ]
 def getMixinKey(orig: str): return reduce(lambda s, i: s + orig[i], mixinKeyEncTab, '')[:32]
 def encWbi(params: dict, img_key: str, sub_key: str):
@@ -180,7 +180,6 @@ def get_up_dynamics(session, host_mid, offset, log_queue, stop_event):
 
 
 def get_single_dynamic_detail(session, dynamic_id, log_queue, target_uid=None):
-    # ... (代码保持不变) ...
     params = {"dynamic_id": dynamic_id}
     detail_headers = HEADERS.copy(); detail_headers['Referer'] = f'https://t.bilibili.com/{dynamic_id}'
     try:
@@ -191,7 +190,6 @@ def get_single_dynamic_detail(session, dynamic_id, log_queue, target_uid=None):
     except (requests.exceptions.RequestException, json.JSONDecodeError, Exception) as e: _log_message(log_queue, f"获取动态详情异常: ID={dynamic_id}, Error={e}", target_uid=target_uid); return None
 
 def like_dynamic(session, dynamic_id, csrf_token, log_queue, stop_event, target_uid=None):
-    # ... (代码保持不变) ...
     payload = { "dynamic_id": dynamic_id, "up": 1, "csrf": csrf_token }
     dynamic_headers = HEADERS.copy(); dynamic_headers['Referer'] = f'https://t.bilibili.com/{dynamic_id}'; dynamic_headers['Origin'] = 'https://t.bilibili.com'
     max_like_attempts=3; current_attempt=0; base_like_delay=1.5
@@ -253,7 +251,6 @@ def like_dynamic(session, dynamic_id, csrf_token, log_queue, stop_event, target_
 class BiliLikerApp:
     def __init__(self, root):
         """初始化应用程序"""
-        # ... (GUI 初始化代码保持不变) ...
         self.root = root; self.root.title("动态守护姬DynamicGuardian v1.3.1"); self.root.geometry("750x650"); self.root.minsize(700, 600); self.root.config(bg=BG_LIGHT_PRIMARY)
         self._app_icon = None
         try:
@@ -274,7 +271,6 @@ class BiliLikerApp:
 
     def _apply_styles(self):
         """配置ttk部件的样式"""
-        # ... (样式代码保持不变) ...
         self.style.configure('.', background=BG_LIGHT_PRIMARY, foreground=FG_TEXT_DARK, font=self.default_font, borderwidth=1)
         self.style.configure('TFrame', background=BG_LIGHT_PRIMARY)
         self.style.configure('TLabel', background=BG_LIGHT_PRIMARY, foreground=FG_TEXT_DARK, font=self.label_font)
@@ -293,14 +289,12 @@ class BiliLikerApp:
 
     def _create_menu(self):
         """创建顶部菜单栏"""
-        # ... (菜单代码保持不变) ...
         menubar = tk.Menu(self.root); self.root.config(menu=menubar)
         help_menu = tk.Menu(menubar, tearoff=0, font=self.default_font); menubar.add_cascade(label="帮助(H)", menu=help_menu)
         help_menu.add_command(label="关于(A)...", command=self._show_about_window, font=self.default_font)
 
     def _show_about_window(self):
         """显示'关于'信息窗口"""
-        # ... (关于窗口代码保持不变) ...
         about_window = tk.Toplevel(self.root); about_window.withdraw()
         about_window.title("关于 B站动态点赞助手"); about_window.resizable(False, False)
         about_window.transient(self.root); about_window.grab_set(); about_window.focus_set()
@@ -329,7 +323,6 @@ class BiliLikerApp:
 
     def _create_widgets(self):
         """创建主界面的所有控件"""
-        # ... (控件创建代码保持不变) ...
         control_frame = ttk.Frame(self.root, padding="10", style='TFrame'); control_frame.pack(fill=tk.X, side=tk.TOP, anchor=tk.N)
         login_frame = ttk.LabelFrame(control_frame, text="登录", padding="5", style='TLabelframe'); login_frame.pack(fill=tk.X, pady=5)
         self.login_status_label = ttk.Label(login_frame, text="状态: 初始化...", width=20, foreground=FG_TEXT_MUTED, style='TLabel'); self.login_status_label.pack(side=tk.LEFT, padx=(5, 10), pady=5)
@@ -364,7 +357,6 @@ class BiliLikerApp:
 
     def _add_uid(self):
         """添加用户输入的UID到列表框"""
-        # ... (代码保持不变) ...
         uid_to_add = self.uid_add_entry_var.get().strip()
         if not uid_to_add.isdigit(): messagebox.showerror("错误", "请输入纯数字的有效UID！", parent=self.root); return
         current_uids = self.uid_listbox.get(0, tk.END)
@@ -374,7 +366,6 @@ class BiliLikerApp:
 
     def _remove_selected_uid(self):
         """从列表框移除当前选中的UID"""
-        # ... (代码保持不变) ...
         selected_indices = self.uid_listbox.curselection()
         if not selected_indices: messagebox.showwarning("提示", "请先在列表中选择要移除的UID。", parent=self.root); return
         for index in reversed(selected_indices):
@@ -395,9 +386,6 @@ class BiliLikerApp:
             self.login_status_label.config(text="状态: 未登录", foreground=FG_TEXT_MUTED); self.action_button.config(state=tk.DISABLED); self.logout_button.config(state=tk.DISABLED); self.login_button.config(state=tk.NORMAL); self.status_bar.config(text="已退出登录")
             _log_message(self.log_queue, "退出登录完成。")
     # --- _logout 方法结束 ---
-
-    # --- 其他方法 (_initialize_session_and_login, _check_cookie_valid, _save_cookies, 等等...) ---
-    # ... (这些方法的代码与上一个包含 Cookie 支持的版本相同，此处省略) ...
     def _initialize_session_and_login(self):
         _log_message(self.log_queue, "正在初始化会话并检查本地 Cookie...")
         self.session = requests.Session()
@@ -545,7 +533,6 @@ class BiliLikerApp:
 
     def _clear_and_create_log_tabs(self, uids_to_monitor):
         """清理旧的UID日志标签页并为新的UID列表创建标签页"""
-        # ... (代码保持不变) ...
         current_tabs = list(self.log_notebook.tabs());
         for tab_id in current_tabs:
             if self.log_notebook.index(tab_id) != 0: self.log_notebook.forget(tab_id)
@@ -562,7 +549,6 @@ class BiliLikerApp:
 
     def _update_tab_text(self, uid_str, new_text):
         """在主线程中安全地更新Notebook标签页的文本"""
-        # ... (代码保持不变) ...
         try:
             target_widget_id = None
             # 可能需要检查 notebook 是否还存在
@@ -576,7 +562,6 @@ class BiliLikerApp:
 
     def _run_backend_process(self, target_uids_list, max_initial_likes, polling_interval_seconds, session, csrf_token, log_queue, stop_event):
         """后台核心工作线程，处理多个UID，使用Wbi签名，并添加计时"""
-        # ... (代码保持不变，已包含 Wbi 和计时逻辑) ...
         latest_dynamic_ids = {}; uid_to_uname = {}; error_occurred = False; stop_message_sent = False
         try:
             phase1_start_time = time.time(); _log_message(log_queue, f"--- Phase 1: 开始高速扫描 UIDs: {','.join(target_uids_list)} (检查首页) ---", target_uid='main'); initial_dynamics_to_like = []; processed_dynamic_ids_initial = set(); uid_scan_delay_min = 0.8; uid_scan_delay_max = 2.0
@@ -676,7 +661,6 @@ class BiliLikerApp:
 
     def _on_closing(self):
         """处理主窗口关闭事件"""
-        # ... (代码保持不变) ...
         should_exit = True
         if self.is_running: should_exit = messagebox.askyesno("确认退出", "点赞/监控任务仍在运行中，确定要停止并退出吗？", parent=self.root)
         if should_exit:
@@ -690,7 +674,6 @@ class BiliLikerApp:
 
 # --- 程序主入口 ---
 if __name__ == "__main__":
-    # ... (代码保持不变) ...
     print("="*40); print("提示: 确保已安装 pip install requests qrcode Pillow brotli"); print("="*40 + "\n")
     root = None
     try:
