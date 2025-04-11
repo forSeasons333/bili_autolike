@@ -10,4 +10,6 @@
 
 下载[Releases](https://github.com/forSeasons333/bili_autolike/releases)下程序本地运行即可
 
-程序图标来自[<img src="https://img.alicdn.com/imgextra/i2/O1CN01FF1t1g1Q3PDWpSm4b_!!6000000001920-55-tps-508-135.svg" alt="iconfont Logo" style="zoom:25%;" />](https://www.iconfont.cn/)
+
+
+程序图标来自阿里巴巴矢量图标库[<img src="https://img.alicdn.com/imgextra/i2/O1CN01FF1t1g1Q3PDWpSm4b_!!6000000001920-55-tps-508-135.svg" alt="iconfont Logo" style="zoom: 1%;" />](https://www.iconfont.cn/)
